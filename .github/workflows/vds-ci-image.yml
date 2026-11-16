@@ -1,4 +1,4 @@
-name: Build CI Image
+name: Build VDS CI Image (amneziawg-linux-kernel-module-vds)
 
 permissions:
   contents: read
