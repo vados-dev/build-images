@@ -1,4 +1,4 @@
-name: Build CI Image
+name: Build nginx-oss CI Image (for nginx-custom-builder)
 
 permissions:
   contents: read
