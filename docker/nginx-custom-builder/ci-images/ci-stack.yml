@@ -1,0 +1,16 @@
+version: "3.9"
+
+services:
+  nginx-ci-runner:
+    image: reg.vados.ru/nginx-custom-builder-ci:lts
+    command: ["bash", "-lc", "sleep infinity"]
+    working_dir: /work
+    volumes:
+      - /home/git/projects/nginx-custom-builder:/work
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.hostname == amster
+      restart_policy:
+        condition: any

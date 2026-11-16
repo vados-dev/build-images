@@ -1,0 +1,27 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-merge-conflict
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: mixed-line-ending
+        args: ["--fix=lf"]
+
+  - repo: local
+    hooks:
+      - id: regen-specs
+        name: "SPECS: regenerate generated specs"
+        language: system
+        pass_filenames: false
+        entry: bash -lc 'make -C SPECS specs && git add SPECS/nginx.spec SPECS/nginx-module-*.spec'
+      - id: rpm-no-vendor-url-tag
+        name: "RPM: forbid 'Vendor URL:' tag"
+        language: pygrep
+        entry: "^Vendor URL:"
+        files: "^SPECS/.*\\.(spec|spec\\.in)$"
+      - id: rpm-no-empty-license-tag
+        name: "RPM: forbid empty License tag"
+        language: pygrep
+        entry: "^License:[[:space:]]*$"
+        files: "^SPECS/.*\\.(spec|spec\\.in)$"

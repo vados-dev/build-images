@@ -1,0 +1,13 @@
+{
+  "projectTitle": "build-images",
+  "titlePrefix": "[ vados-dev ] :: ",
+  "subtitle": "Автогенерируемая страница из README.md (ветка gh-pages).",
+  "links": [
+    { "href": "./repo/", "text": "DNF/DEB/APK repo" },
+    { "href": "./README.md", "text": "Raw README.md" }
+  ],
+  "quickLinks": [
+    { "href": "./repo/centos/10/mainline/x86_64/", "text": "DNF mainline (CentOS 10 x86_64)" },
+    { "href": "./repo/centos/10/stable/x86_64/", "text": "DNF stable (CentOS 10 x86_64)" }
+  ]
+}
