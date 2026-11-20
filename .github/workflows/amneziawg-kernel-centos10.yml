@@ -44,7 +44,7 @@ on:
         default: "amneziawg-kernel-centos10"
         type: string
       width_kernel:
-        description: "Kernel version for kernel-devel/kernel-headers (empty = skip)"
+        description: "Kernel version (empty = latest, or e.q. 6.12.0-281.el10.x86_64)"
         required: false
         default: ""
         type: string
@@ -84,13 +84,18 @@ jobs:
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
+          KERNEL_VER: ${{ inputs.width_kernel }}
           CI_IMAGE_NAME: ${{ inputs.image_name }}
           CI_IMAGE_VER: ${{ vars.AMNEZIA_KERNEL_IMG_VER || '' }}
         run: |
           set -euo pipefail
 
           repo_lc="$(printf '%s' "${GITHUB_REPOSITORY}" | tr '[:upper:]' '[:lower:]')"
-          image="ghcr.io/${repo_lc}/${CI_IMAGE_NAME}"
+          if [[ "${KERNEL_VER}" = "false" ]]; then
+            image="ghcr.io/${repo_lc}/${CI_IMAGE_NAME}"
+          else
+            image="ghcr.io/${repo_lc}/${CI_IMAGE_NAME}-${KERNEL_VER}"
+          fi 
 
           next_tag() {
             local t="$1"
