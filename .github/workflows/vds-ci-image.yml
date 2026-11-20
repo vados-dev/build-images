@@ -1,4 +1,4 @@
-name: Build VDS CI Image (amneziawg-linux-kernel-module-vds)
+name: Build CI Image amneziawg-linux-kernel-module-vds
 
 permissions:
   contents: read
@@ -21,7 +21,7 @@ on:
           - build
           - delete
       dockerfile:
-        description: "Dockerfile in location Docker/ci-image/"
+        description: "Dockerfile in location docker/ci-images/"
         required: true
         default: "Dockerfile.ci"
         type: string
@@ -38,7 +38,7 @@ on:
       image_name:
         description: "Build image name"
         required: true
-        default: "centos-10"
+        default: "amneziawg-kernel-centos10"
         type: string
       width_kernel:
         description: "Kernel version for kernel-devel/kernel-headers (empty = skip)"
@@ -53,7 +53,7 @@ on:
       width_base_packages:
         description: "Space separated package list for dnf install (CentOS Stream names)"
         required: true
-        default: "dnf-plugins-core git make curl wget libmnl-devel pkgconf python3 python3-pip"
+        default: "git make curl wget libmnl-devel pkgconf python3 python3-pip"
         type: string
       delete_tags:
         description: "Delete mode: space/comma separated tags (e.g. v0.0.1b,sha-abc123)"
@@ -82,7 +82,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           CI_IMAGE_NAME: ${{ inputs.image_name }}
-          CI_IMAGE_VER: ${{ vars.CI_IMAGE_VER || '' }}
+          CI_IMAGE_VER: ${{ vars.AMNEZIA_KERNEL_IMG_VER || '' }}
         run: |
           set -euo pipefail
 
