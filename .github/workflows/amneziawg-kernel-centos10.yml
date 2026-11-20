@@ -188,7 +188,7 @@ jobs:
             WIDTH_DKMS=${{ inputs.width_dkms }}
             WIDTH_BASE_PACKAGES=${{ inputs.width_base_packages }}
           context: .
-          file: docker/ci-image/${{ inputs.dockerfile }}
+          file: docker/ci-images/${{ inputs.dockerfile }}
           platforms: ${{ inputs.build_platforms }}
           push: true
           tags: |
