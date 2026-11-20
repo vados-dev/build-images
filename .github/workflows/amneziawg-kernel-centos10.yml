@@ -23,8 +23,11 @@ on:
       dockerfile:
         description: "Dockerfile in location docker/ci-images/"
         required: true
-        default: "Dockerfile.ci"
-        type: string
+        default: "Dockerfile.new"
+        type: choice
+        options:
+          - Dockerfile.new
+          - Dockerfile.ci
       base_image:
         description: "Base image (passed to Dockerfile as CI_BASE_IMAGE)"
         required: true
