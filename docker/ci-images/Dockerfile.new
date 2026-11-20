@@ -14,18 +14,21 @@ RUN set -eux; dnf -y install dnf-plugins-core; dnf config-manager --set-enabled 
 RUN set -eux; dnf -y install epel-release;
 
 # Устанавливаем ядро Stream 10 (по умолчанию 6.12) и инструменты для initramfs
-RUN dnf -y install kernel kernel-core kernel-devel-matched kernel-headers kernel-modules kernel-modules-core \
-    kernel-modules-extra kernel-modules-extra-matched kernel-srpm-macros kernel-tools kernel-tools-libs kernel-tools-libs-devel dracut && \
-    dnf clean all
-
-# Генерируем initramfs под установленное ядро
-RUN dracut -f --kver "$(ls /usr/lib/modules | head -1)" /boot/initramfs-custom.img
-
 # WIDTH_KERNEL — точная версия ядра, например 6.12.0-273.el10.x86_64.
 RUN if [ -n "$WIDTH_KERNEL" ] && [ "$WIDTH_KERNEL" != "false" ]; then \
         set -eux; \
-        dnf -y install "kernel-headers-${WIDTH_KERNEL}" "kernel-devel-${WIDTH_KERNEL}"; \
+        dnf -y install "kernel-${WIDTH_KERNEL}" "kernel-core-${WIDTH_KERNEL}" "kernel-devel-${WIDTH_KERNEL}" "kernel-devel-matched-${WIDTH_KERNEL}" \
+        "kernel-headers-${WIDTH_KERNEL}" "kernel-modules-${WIDTH_KERNEL}" "kernel-modules-core-${WIDTH_KERNEL}" \
+        "kernel-extra-${WIDTH_KERNEL}" "kernel-extra-matched-${WIDTH_KERNEL}" kernel-srpm-macros "kernel-tools-${WIDTH_KERNEL}" "kernel-tools-libs-${WIDTH_KERNEL}" "kernel-tools-libs-devel-${WIDTH_KERNEL}" dracut; \
+    else \
+        set -eux; \
+        dnf -y install kernel kernel-core kernel-devel kernel-devel-matched kernel-headers kernel-modules kernel-modules-core \
+        kernel-modules-extra kernel-modules-extra-matched kernel-srpm-macros kernel-tools kernel-tools-libs kernel-tools-libs-devel dracut; \
     fi
+
+# Генерируем initramfs под установленное ядро
+RUN set -eux; dracut -f --kver "$(ls /usr/lib/modules | head -1)" /boot/initramfs-custom.img
+
 RUN if [ "$WIDTH_DKMS" = "true" ]; then \
         set -eux; \
         os_ver="$(rpm -E '%{rhel}' 2>/dev/null || true)"; \
@@ -40,6 +43,8 @@ RUN if [ -n "$WIDTH_BASE_PACKAGES" ] && [ "$WIDTH_BASE_PACKAGES" != "false" ]; t
         set -eux; \
         dnf -y install $WIDTH_BASE_PACKAGES; \
     fi
+
+RUN set -eux; dnf clean all;
 
 #ADD docker/tools/mc.tar.gz /root/.config
 
