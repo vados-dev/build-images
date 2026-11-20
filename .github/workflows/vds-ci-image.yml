@@ -21,7 +21,7 @@ on:
           - build
           - delete
       dockerfile:
-        description: "Dockerfile in location internal/ci-image/"
+        description: "Dockerfile in location Docker/ci-image/"
         required: true
         default: "Dockerfile.ci"
         type: string
@@ -188,7 +188,7 @@ jobs:
             WIDTH_DKMS=${{ inputs.width_dkms }}
             WIDTH_BASE_PACKAGES=${{ inputs.width_base_packages }}
           context: .
-          file: internal/ci-image/${{ inputs.dockerfile }}
+          file: docker/ci-image/${{ inputs.dockerfile }}
           platforms: ${{ inputs.build_platforms }}
           push: true
           tags: |
