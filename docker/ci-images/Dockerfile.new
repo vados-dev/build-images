@@ -10,6 +10,9 @@ LABEL maintainer="vados-dev"
 LABEL com.docker.compose.service="amneziawg-ci-runner"
 LABEL com.docker.compose.project="amneziawg-ci"
 
+RUN set -eux; dnf -y install dnf-plugins-core; dnf config-manager --set-enabled crb; dnf config-manager --set-enabled appstream;
+RUN set -eux; dnf -y install epel-release;
+
 # Устанавливаем ядро Stream 10 (по умолчанию 6.12) и инструменты для initramfs
 RUN dnf -y install kernel kernel-core kernel-devel-matched kernel-headers kernel-modules kernel-modules-core \
     kernel-modules-extra kernel-modules-extra-matched kernel-srpm-macros kernel-tools kernel-tools-libs kernel-tools-libs-devel dracut && \
@@ -17,10 +20,6 @@ RUN dnf -y install kernel kernel-core kernel-devel-matched kernel-headers kernel
 
 # Генерируем initramfs под установленное ядро
 RUN dracut -f --kver "$(ls /usr/lib/modules | head -1)" /boot/initramfs-custom.img
-
-RUN set -eux; dnf -y install dnf-plugins-core; dnf config-manager --set-enabled crb; dnf -y check-update;
-RUN set -eux; dnf -y install epel-release;
-RUN set -eux; dnf -y update;
 
 # WIDTH_KERNEL — точная версия ядра, например 6.12.0-273.el10.x86_64.
 RUN if [ -n "$WIDTH_KERNEL" ] && [ "$WIDTH_KERNEL" != "false" ]; then \
